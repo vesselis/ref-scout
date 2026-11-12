@@ -16,9 +16,9 @@ export default async function LoginPage({
 
       <div className="relative w-full max-w-sm">
         <div className="mb-10 text-center">
-          <p className="font-display text-5xl font-bold tracking-tight text-court-100">
+          <h1 className="font-display text-5xl font-bold tracking-tight text-court-100">
             CourtVision
-          </p>
+          </h1>
           <p className="mt-3 text-sm text-court-400">
             Clip the plays. Write your read. Brief the crew.
           </p>

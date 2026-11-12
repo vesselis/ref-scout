@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/utils";
 import { Badge, EmptyState } from "@/components/ui";
 import { ShareButton } from "@/components/reports/ShareButton";
 import { DeleteReportButton } from "@/components/DeleteReportButton";
+import { Members, type MemberItem } from "@/components/reports/Members";
 import { PlayCard } from "@/components/plays/PlayCard";
 import { PlayFormDialog } from "@/components/plays/PlayFormDialog";
 import { primaryButton, secondaryButton } from "@/lib/styles";
@@ -55,6 +56,15 @@ export default async function ReportPage({
     comment_count:
       Array.isArray(p.comments) && p.comments[0] ? p.comments[0].count : 0,
   }));
+
+  let members: MemberItem[] = [];
+  if (role === "owner") {
+    const { data: memberRows } = await supabase
+      .from("scout_report_members")
+      .select("user_id, role, profile:scout_profiles(display_name)")
+      .eq("report_id", id);
+    members = (memberRows ?? []) as unknown as MemberItem[];
+  }
 
   return (
     <div>
@@ -128,6 +138,15 @@ export default async function ReportPage({
             <PlayCard key={play.id} play={play} reportId={id} />
           ))}
         </div>
+      )}
+
+      {role === "owner" && (
+        <section className="mt-12">
+          <h2 className="mb-4 font-display text-2xl font-semibold text-court-100">
+            Crew access
+          </h2>
+          <Members reportId={id} members={members} />
+        </section>
       )}
     </div>
   );
